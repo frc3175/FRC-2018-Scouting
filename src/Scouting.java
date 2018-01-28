@@ -9,17 +9,28 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import acm.graphics.GCanvas;
 import acm.graphics.GImage;
-import acm.graphics.GLabel;
-import acm.program.ConsoleProgram;
 import acm.program.GraphicsProgram;
 import acm.program.GraphicsProgramInterface;
 
 public class Scouting extends GraphicsProgram {
 
-	private boolean gameOn; // true after clicking the start button
-	private boolean isAuton; // first 15 seconds of the match
+	/** True after clicking the start button **/
+	@SuppressWarnings("unused")
+	private boolean gameOn;
+	
+	/** First 15 seconds of the match **/
+	@SuppressWarnings("unused")
+	private boolean isAuton;
+	
+	@SuppressWarnings("unused")
+	private String matchNumber = null;
+	@SuppressWarnings("unused")
+	private Boolean isRed = null;
+	@SuppressWarnings("unused")
+	private String teamNumber = null;
+	 
 
-	// all the interactors that will be called more than once
+	// All the interactors that will be called more than once
 	private GCanvas canvas = new GCanvas();
 	private JTextField matchNum = new JTextField(5);
 	private JTextField red1;
@@ -48,9 +59,9 @@ public class Scouting extends GraphicsProgram {
 		addFieldComponents();
 	}
 
-	/*
-	 * Adds all the graphics to canvas in the beginning
-	 */
+	/**
+	 * Adds all the graphics to canvas in the beginning.
+	 **/
 	private void initiation() {
 		JLabel Red1 = new JLabel("RED 1");
 		Red1.setForeground(Color.RED);
@@ -64,9 +75,11 @@ public class Scouting extends GraphicsProgram {
 		Blue2.setForeground(Color.BLUE);
 		JLabel Blue3 = new JLabel("BLUE 3");
 		Blue3.setForeground(Color.BLUE);
+		
 		setCanvasSize(1000, 457);
 		canvas.setSize(1000, 457);
 		add(canvas, 0, 0);
+		
 		GImage field = new GImage("res/field.JPG");
 		field.setSize(1000, 427);
 		canvas.add(field, 0, 30);
@@ -74,6 +87,7 @@ public class Scouting extends GraphicsProgram {
 		match.setFont(new Font("Sans Serif", Font.BOLD | Font.ITALIC, 20));
 		JLabel selectMode = new JLabel("Mode");
 		selectMode.setFont(new Font("Sans Serif", Font.BOLD, 20));
+		
 		canvas.add(selectMode, getWidth() / 2 - 100, 5);
 		canvas.add(match, 30, 5);
 		canvas.add(Red1, 20, 130);
@@ -82,25 +96,37 @@ public class Scouting extends GraphicsProgram {
 		canvas.add(Blue3, 890, 130);
 		canvas.add(Blue2, 890, 225);
 		canvas.add(Blue1, 890, 320);
+		
 		addInteractors();
-		System.out.println("init");
+		System.out.println("Initialized...");
 	}
 
-	/*
-	 * Makes the game elements that can earn score
-	 */
+	/**
+	 * Makes the game elements that can earn points.
+	 **/
 	private void addFieldComponents() {
 		blueLine = new GImage("res/blueLine.JPG");
+		blueLine.addMouseListener(this);
 		blueRung = new GImage("res/blueRung.JPG");
+		blueRung.addMouseListener(this);
 		blueVault = new GImage("res/blueVault.JPG");
+		blueVault.addMouseListener(this);
 		bottomScale = new GImage("res/bottomScale.JPG");
+		bottomScale.addMouseListener(this);
 		bottomSwitch = new GImage("res/bottomSwitch.JPG");
+		bottomSwitch.addMouseListener(this);
 		redLine = new GImage("res/redLine.JPG");
+		redLine.addMouseListener(this);
 		redRung = new GImage("res/redRung.JPG");
+		redRung.addMouseListener(this);
 		redVault = new GImage("res/redVault.JPG");
+		redVault.addMouseListener(this);
 		topScale = new GImage("res/topScale.JPG");
+		topScale.addMouseListener(this);
 		topSwitch = new GImage("res/topSwitch.JPG");
+		topSwitch.addMouseListener(this);
 		addMouseListeners();
+		
 		blueLine.setSize(10, 410);
 		canvas.add(blueLine, 720, 40);
 		blueRung.setSize(20, 30);
@@ -125,22 +151,25 @@ public class Scouting extends GraphicsProgram {
 		canvas.add(topSwitch, 640, 157);
 	}
 
-	/*
-	 * adds the interactors to the screen
-	 */
+	/**
+	 * Adds the interactors to the screen.
+	 **/
 	private void addInteractors() {
 		start = new JButton("Start");
 		reset = new JButton("Reset");
 		submit = new JButton("Submit");
+		
 		red1 = new JTextField(10);
 		red2 = new JTextField(10);
 		red3 = new JTextField(10);
 		blue1 = new JTextField(10);
 		blue2 = new JTextField(10);
 		blue3 = new JTextField(10);
+		
 		String[] modes = { "Pending", "Autonomous", "Teleop" };
 		mode = new JComboBox(modes);
 		mode.setSelectedIndex(0);
+		
 		canvas.add(matchNum, 100, 10);
 		canvas.add(mode, getWidth() / 2, 10);
 		canvas.add(red1, 20, 145);
@@ -156,49 +185,53 @@ public class Scouting extends GraphicsProgram {
 		addActionListeners();
 	}
 
-	/*
-	 * Adds to the score when clicked
-	 */
-	public void mouseClicked(MouseEvent event) {
-		// Java runs this when mouse is moved
-		System.out.println(Integer.toString(event.getX()));
+	/**
+	 * Adds to the score when clicked.
+	 **/
+	@Override
+	public void mousePressed(MouseEvent event) {
+		// Java runs this when the mouse is clicked
+		System.out.println("Mouse position: " + event.getX() + ", " + event.getY());
+		
 		if (getElementAt(event.getX(), event.getY()) == blueVault) {
-			System.out.println("Blue Vault Scored");
-		}
-
+			System.out.println("Blue Vault scored");
+		} else if (getElementAt(event.getX(), event.getY()) == bottomScale) {
+			System.out.println("Bottom scale scored");
+	    } else if (getElementAt(event.getX(), event.getY()) == bottomSwitch) {
+	      System.out.println("Bottom switch scored");
+	    }
 	}
-	/*
-	 * listens for and responds to action commands
-	 */
+	
+	/**
+	 * Listens for and responds to action commands.
+	 **/
+	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == start) {
-			// when the match starts
+			// When the match starts
 			gameOn = true;
 			isAuton = true;
 			mode.setSelectedIndex(1);
-		}
-		if (event.getSource() == reset) {
-			// when the match resets
+		} else if (event.getSource() == reset) {
+			// When the match resets
 			gameOn = false;
 			isAuton = true;
 			mode.setSelectedIndex(0);
-		}
-		if (event.getSource() == submit) {
+		} else if (event.getSource() == submit) {
 			gameOn = false;
 			isAuton = true;
 			mode.setSelectedIndex(0);
-		}
-		if (event.getSource() == mode) {
+		} else if (event.getSource() == mode) {
 			if (mode.getSelectedIndex() == 3) {
-				// teleop mode
+				// TeleOp mode
 				isAuton = false;
 			}
 		}
 	}
 
-	/*
-	 * Keep stats for one match
-	 */
+	/**
+	 * Keep statistics for one match.
+	 **/
 	private void recordOneGame() {
 
 	}
