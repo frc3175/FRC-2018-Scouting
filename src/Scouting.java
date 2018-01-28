@@ -31,9 +31,20 @@ public class Scouting extends GraphicsProgram {
 	private JButton start;
 	private JButton reset;
 	private JButton submit;
+	private GImage blueLine = new GImage("res/blueLine.JPG");
+	private GImage blueRung = new GImage("res/blueRung.JPG");
+	private GImage blueVault = new GImage("res/blueVault.JPG");
+	private GImage bottomScale = new GImage("res/bottomScale.JPG");
+	private GImage bottomSwitch = new GImage("res/bottomSwitch.JPG");
+	private GImage redLine = new GImage("res/redLine.JPG");
+	private GImage redRung = new GImage("res/redRung.JPG");
+	private GImage redVault = new GImage("res/redVault.JPG");
+	private GImage topScale = new GImage("res/topScale.JPG");
+	private GImage topSwitch = new GImage("res/topSwitch.JPG");
 
 	public void run() {
 		initiation();
+		addFieldComponents();
 	}
 
 	/*
@@ -71,6 +82,31 @@ public class Scouting extends GraphicsProgram {
 		canvas.add(Blue2, 890, 225);
 		canvas.add(Blue1, 890, 320);
 		addInteractors();
+	}
+
+	private void addFieldComponents() {
+		blueLine.setSize(10, 410);
+		canvas.add(blueLine, 720, 40);
+		blueRung.setSize(20, 30);
+		canvas.add(blueRung, 505, 230);
+		blueVault.setSize(85, 65);
+		canvas.add(blueVault, 810, 255);
+		bottomScale.setSize(60, 45);
+		canvas.add(bottomScale, 470, 297);
+		bottomSwitch.setSize(65, 50);
+		canvas.add(bottomSwitch, 300, 280);
+		canvas.add(bottomSwitch, 640, 280);
+		redLine.setSize(10, 410);
+		canvas.add(redLine, 274, 40);
+		redRung.setSize(20, 30);
+		canvas.add(redRung, 477, 230);
+		redVault.setSize(85, 65);
+		canvas.add(redVault, 115, 170);
+		topScale.setSize(60, 45);
+		canvas.add(topScale, 474, 144);
+		topSwitch.setSize(65, 50);
+		canvas.add(topSwitch, 300, 156);
+		canvas.add(topSwitch, 640, 157);
 	}
 
 	/*
