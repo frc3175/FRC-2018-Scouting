@@ -65,9 +65,9 @@ public class Scouting extends GraphicsProgram {
 		addInteractors();
 	}
 
-	/*
-	 * adds the interactors to the screen
-	 */
+	/**
+	 * Adds the interactors to the screen.
+	 **/
 	private void addInteractors() {
 		pending = new JLabel("Pending");
 		auton = new JLabel("Autonomous");
