@@ -13,35 +13,39 @@ import acm.program.GraphicsProgram;
 
 public class Scouting extends GraphicsProgram {
 
-	private boolean gameOn;
+	private boolean gameOn; // true after clicking the start button
+	private boolean isAuton; // first 15 seconds of the match
 
-	private static int runtime = 0;
-
+	// all the interactors that will be called more than once
 	private GCanvas canvas = new GCanvas();
 	private JTextField matchNum = new JTextField(5);
-	private JTextField red1 = new JTextField(10);
-	private JTextField red2 = new JTextField(10);
-	private JTextField red3 = new JTextField(10);
-	private JTextField blue1 = new JTextField(10);
-	private JTextField blue2 = new JTextField(10);
-	private JTextField blue3 = new JTextField(10);
+	private JTextField red1;
+	private JTextField red2;
+	private JTextField red3;
+	private JTextField blue1;
+	private JTextField blue2;
+	private JTextField blue3;
 	private JLabel Red1 = new JLabel("RED 1");
 	private JLabel Red2 = new JLabel("RED 2");
 	private JLabel Red3 = new JLabel("RED 3");
 	private JLabel Blue1 = new JLabel("BLUE 1");
 	private JLabel Blue2 = new JLabel("BLUE 2");
 	private JLabel Blue3 = new JLabel("BLUE 3");
-	private JLabel pending = new JLabel("Pending");
-	private JLabel auton = new JLabel("Autonomous");
-	private JLabel teleop = new JLabel("Teleop");
-	private JButton start = new JButton("Start");
-	private JButton reset = new JButton("Reset");
-	private JLabel time = new JLabel("02 : 30");
+	private JLabel pending;
+	private JLabel auton;
+	private JLabel teleop;
+	private JButton start;
+	private JButton reset;
+	private JButton submit;
 
 	public void run() {
 		initiation();
 	}
 
+	
+	/*
+	 * Adds all the graphics to canvas in the beginning
+	 */
 	private void initiation() {
 		setCanvasSize(1000, 457);
 		canvas.setSize(1000, 457);
@@ -51,88 +55,74 @@ public class Scouting extends GraphicsProgram {
 		canvas.add(field, 0, 30);
 		JLabel match = new JLabel("Match");
 		match.setFont(new Font("Sans Serif", Font.BOLD | Font.ITALIC, 20));
-		canvas.add(match, 5, 5);
+		canvas.add(match, 30, 5);
 		canvas.add(Red1, 20, 130);
 		canvas.add(Red2, 20, 225);
 		canvas.add(Red3, 20, 320);
-		canvas.add(Blue1, 890, 130);
+		canvas.add(Blue3, 890, 130);
 		canvas.add(Blue2, 890, 225);
-		canvas.add(Blue3, 890, 320);
+		canvas.add(Blue1, 890, 320);
+		addInteractors();
+	}
+
+	/*
+	 * adds the interactors to the screen
+	 */
+	private void addInteractors() {
+		pending = new JLabel("Pending");
+		auton = new JLabel("Autonomous");
+		teleop = new JLabel("Teleop");
+		start = new JButton("Start");
+		reset = new JButton("Reset");
+		submit = new JButton("Submit");
+		red1 = new JTextField(10);
+		red2 = new JTextField(10);
+		red3 = new JTextField(10);
+		blue1 = new JTextField(10);
+		blue2 = new JTextField(10);
+		blue3 = new JTextField(10);
 		pending.setFont(new Font("Sans Serif", Font.BOLD, 20));
 		pending.setForeground(Color.RED);
 		auton.setFont(new Font("Sans Serif", Font.BOLD, 20));
 		auton.setForeground(Color.ORANGE);
 		teleop.setFont(new Font("Sans Serif", Font.BOLD, 20));
 		teleop.setForeground(Color.GREEN);
-		canvas.add(pending, getWidth() / 4, 5);
-		JLabel timer = new JLabel("Timer");
-		timer.setFont(new Font("Sans Serif", Font.BOLD, 20));
-		canvas.add(timer, getWidth() / 2 - 60, 5);
-		time.setFont(new Font("Sans Serif", Font.PLAIN, 20));
-		canvas.add(time, 510, 5);
-		addInteractors();
-	}
-
-	private void addInteractors() {
-		canvas.add(matchNum, 75, 10);
+		canvas.add(pending, getWidth() / 2 - 100, 5);
+		canvas.add(matchNum, 100, 10);
 		canvas.add(red1, 20, 145);
 		canvas.add(red2, 20, 240);
 		canvas.add(red3, 20, 335);
-		canvas.add(blue1, 890, 145);
+		canvas.add(blue3, 890, 145);
 		canvas.add(blue2, 890, 240);
-		canvas.add(blue3, 890, 335);
-		canvas.add(start, getWidth() - 200, 10);
-		canvas.add(reset, getWidth() - 100, 10);
+		canvas.add(blue1, 890, 335);
+		canvas.add(start, getWidth() - 300, 10);
+		canvas.add(reset, getWidth() - 200, 10);
+		canvas.add(submit, getWidth() - 100, 10);
 		addActionListeners();
 	}
 
+	
+	/*
+	 * listens for and responds to action commands
+	 */
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == start) {
+			// when the match starts
 			gameOn = true;
-			recordOneGame();
+			isAuton = true;
+			
 		}
 		if (event.getSource() == reset) {
-			gameOn = false;
+			// when the match resets
 		}
 	}
 
+	
+	/*
+	 * Keep stats for one match
+	 */
 	private void recordOneGame() {
-		int initialTime = (int) System.currentTimeMillis();
-		canvas.remove(pending);
-		canvas.add(auton, getWidth() / 4, 5);
-		while (gameOn) {
-			int elapsedTime = ((int) System.currentTimeMillis() - initialTime) / 1000;
-			if (elapsedTime >= 15) {
-				canvas.remove(auton);
-				canvas.add(teleop, getWidth() / 4, 5);
-			}
-			if (elapsedTime >= 150) {
-				gameOn = false;
-			}
-			if (elapsedTime != runtime) {
-				runtime = elapsedTime;
-				canvas.remove(time);
-				int remainingTime = 150 - elapsedTime;
-				int min = remainingTime / 60;
-				int sec = remainingTime % 60;
-				String Sec;
-				String Min;
-				if (sec < 10) {
-					Sec = "0" + sec;
-				} else {
-					Sec = Integer.toString(sec);
-				}
-				Min = "0" + min;
-				System.out.println(Min + " : " + Sec);
-				time = new JLabel(Min + " : " + Sec);
-				time.setFont(new Font("Sans Serif", Font.PLAIN, 20));
-				canvas.add(time, 510, 5);
-			}
-			pause(50);
-		}
-		canvas.remove(teleop);
-		canvas.add(pending, getWidth() / 4, 5);
-		gameOn = false;
+		
 	}
 
 }
