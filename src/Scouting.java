@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -31,16 +32,16 @@ public class Scouting extends GraphicsProgram {
 	private JButton start;
 	private JButton reset;
 	private JButton submit;
-	private GImage blueLine = new GImage("res/blueLine.JPG");
-	private GImage blueRung = new GImage("res/blueRung.JPG");
-	private GImage blueVault = new GImage("res/blueVault.JPG");
-	private GImage bottomScale = new GImage("res/bottomScale.JPG");
-	private GImage bottomSwitch = new GImage("res/bottomSwitch.JPG");
-	private GImage redLine = new GImage("res/redLine.JPG");
-	private GImage redRung = new GImage("res/redRung.JPG");
-	private GImage redVault = new GImage("res/redVault.JPG");
-	private GImage topScale = new GImage("res/topScale.JPG");
-	private GImage topSwitch = new GImage("res/topSwitch.JPG");
+	private GImage blueLine;
+	private GImage blueRung;
+	private GImage blueVault;
+	private GImage bottomScale;
+	private GImage bottomSwitch;
+	private GImage redLine;
+	private GImage redRung;
+	private GImage redVault;
+	private GImage topScale;
+	private GImage topSwitch;
 
 	public void run() {
 		initiation();
@@ -82,9 +83,24 @@ public class Scouting extends GraphicsProgram {
 		canvas.add(Blue2, 890, 225);
 		canvas.add(Blue1, 890, 320);
 		addInteractors();
+		System.out.println("init");
 	}
 
+	/*
+	 * Makes the game elements that can earn score
+	 */
 	private void addFieldComponents() {
+		blueLine = new GImage("res/blueLine.JPG");
+		blueRung = new GImage("res/blueRung.JPG");
+		blueVault = new GImage("res/blueVault.JPG");
+		bottomScale = new GImage("res/bottomScale.JPG");
+		bottomSwitch = new GImage("res/bottomSwitch.JPG");
+		redLine = new GImage("res/redLine.JPG");
+		redRung = new GImage("res/redRung.JPG");
+		redVault = new GImage("res/redVault.JPG");
+		topScale = new GImage("res/topScale.JPG");
+		topSwitch = new GImage("res/topSwitch.JPG");
+		addMouseListeners();
 		blueLine.setSize(10, 410);
 		canvas.add(blueLine, 720, 40);
 		blueRung.setSize(20, 30);
@@ -140,6 +156,17 @@ public class Scouting extends GraphicsProgram {
 		addActionListeners();
 	}
 
+	/*
+	 * Adds to the score when clicked
+	 */
+	public void mouseClicked(MouseEvent event) {
+		// Java runs this when mouse is moved
+		System.out.println(Integer.toString(event.getX()));
+		if (getElementAt(event.getX(), event.getY()) == blueVault) {
+			System.out.println("Blue Vault Scored");
+		}
+
+	}
 	/*
 	 * listens for and responds to action commands
 	 */
