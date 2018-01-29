@@ -2,13 +2,22 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Iterator;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import acm.graphics.GCanvas;
 import acm.graphics.GImage;
 import acm.program.GraphicsProgram;
@@ -26,14 +35,14 @@ public class Scouting extends GraphicsProgram {
 	private String matchNumber = null;
 	private Boolean isRed = null;
 	private String teamNumber = null;
-	private Boolean autoRun = null;
+	private Boolean autoRun = false;
 	private Integer autoSwitch = 0;
 	private Integer autoScale = 0;
 	private Integer teleSwitch = 0;
 	private Integer teleScale = 0;
 	private Integer vault = 0;
-	private Boolean climb = null;
-	private Boolean parked = null;
+	private Boolean climb = false;
+	private Boolean parked = false;
 
 	// All the interactors that will be called more than once
 	private GCanvas canvas = new GCanvas();
@@ -62,6 +71,12 @@ public class Scouting extends GraphicsProgram {
 	private JButton blueTopSwitch;
 	private JButton redPark;
 	private JButton bluePark;
+
+	private int count = 2;
+	private FileInputStream inputStream;
+	private Workbook workbook;
+	private Sheet firstSheet;
+	private Iterator<Row> iterator;
 
 	public void run() {
 		initiation();
@@ -234,33 +249,35 @@ public class Scouting extends GraphicsProgram {
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == start) {
 			// When the match starts
-			gameOn = true;
-			isAuton = true;
-			mode.setSelectedIndex(1);
-			matchNumber = matchNum.getText();
-			if (!red1.getText().equals("")) {
-				isRed = true;
-				teamNumber = red1.getText();
-			}
-			if (!red2.getText().equals("")) {
-				isRed = true;
-				teamNumber = red2.getText();
-			}
-			if (!red3.getText().equals("")) {
-				isRed = true;
-				teamNumber = red3.getText();
-			}
-			if (!blue1.getText().equals("")) {
-				isRed = false;
-				teamNumber = blue1.getText();
-			}
-			if (!blue2.getText().equals("")) {
-				isRed = false;
-				teamNumber = blue2.getText();
-			}
-			if (!blue3.getText().equals("")) {
-				isRed = false;
-				teamNumber = blue3.getText();
+			if (!matchNum.getText().equals("")) {
+				gameOn = true;
+				isAuton = true;
+				mode.setSelectedIndex(1);
+				matchNumber = matchNum.getText();
+				if (!red1.getText().equals("")) {
+					isRed = true;
+					teamNumber = red1.getText();
+				}
+				if (!red2.getText().equals("")) {
+					isRed = true;
+					teamNumber = red2.getText();
+				}
+				if (!red3.getText().equals("")) {
+					isRed = true;
+					teamNumber = red3.getText();
+				}
+				if (!blue1.getText().equals("")) {
+					isRed = false;
+					teamNumber = blue1.getText();
+				}
+				if (!blue2.getText().equals("")) {
+					isRed = false;
+					teamNumber = blue2.getText();
+				}
+				if (!blue3.getText().equals("")) {
+					isRed = false;
+					teamNumber = blue3.getText();
+				}
 			}
 		} else if (event.getSource() == reset) {
 			// When the match resets
@@ -277,20 +294,25 @@ public class Scouting extends GraphicsProgram {
 			matchNumber = null;
 			isRed = null;
 			teamNumber = null;
-			autoRun = null;
+			autoRun = false;
 			autoSwitch = 0;
 			autoScale = 0;
 			teleSwitch = 0;
 			teleScale = 0;
 			vault = 0;
-			climb = null;
-			parked = null;
+			climb = false;
+			parked = false;
 		} else if (event.getSource() == submit) {
 			// sends the data over
-			if (gameOn && matchNumber != null && teamNumber != null) {
+			if (gameOn && matchNumber != null && teamNumber != null && mode.getSelectedIndex() == 2) {
+				count++;
 				gameOn = false;
 				isAuton = true;
-				submitData();
+				try {
+					writeData();
+				} catch (IOException e) {
+					System.out.print(e);
+				}
 				mode.setSelectedIndex(0);
 				matchNum.setText("");
 				red1.setText("");
@@ -302,16 +324,17 @@ public class Scouting extends GraphicsProgram {
 				matchNumber = null;
 				isRed = null;
 				teamNumber = null;
-				autoRun = null;
+				autoRun = false;
 				autoSwitch = 0;
 				autoScale = 0;
 				teleSwitch = 0;
 				teleScale = 0;
 				vault = 0;
-				parked = null;
+				parked = false;
+				climb = false;
 			}
 		} else if (event.getSource() == mode) {
-			if (mode.getSelectedIndex() == 3) {
+			if (mode.getSelectedIndex() == 2) {
 				// TeleOp mode
 				isAuton = false;
 			}
@@ -386,9 +409,26 @@ public class Scouting extends GraphicsProgram {
 	}
 
 	/*
-	 * Sends the stats of one match to an excel spreadsheet
+	 * writes data to the excel document
 	 */
-	private void submitData() {
+	private void writeData() throws IOException {
+		String[] data = { matchNumber, teamNumber, autoRun.toString(), autoSwitch.toString(), autoScale.toString(),
+				vault.toString(), teleSwitch.toString(), teleScale.toString(), parked.toString(), climb.toString() };
+		inputStream = new FileInputStream(new File("res/data.xls"));
+		Workbook workbook = new HSSFWorkbook(inputStream);
+		Sheet firstSheet = workbook.getSheetAt(0);
+		Row row = firstSheet.createRow(count);
+		int col = 0;
+		for (String stat : data) {
+			Cell cell = row.createCell(++col);
+			cell.setCellValue(stat);
+		}
+		try (FileOutputStream outputStream = new FileOutputStream("res/data.xls")) {
+			workbook.write(outputStream);
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+		workbook.close();
 	}
 
 }
