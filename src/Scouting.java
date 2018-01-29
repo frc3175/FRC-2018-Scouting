@@ -29,9 +29,8 @@ public class Scouting extends GraphicsProgram {
 	private Boolean autoRun = null;
 	private Integer autoSwitch = 0;
 	private Integer autoScale = 0;
-	private Integer mySwitch = 0;
-	private Integer oppSwitch = 0;
-	private Integer teleopScale = 0;
+	private Integer teleSwitch = 0;
+	private Integer teleScale = 0;
 	private Integer vault = 0;
 	private Boolean climb = null;
 	private Boolean parked = null;
@@ -61,6 +60,8 @@ public class Scouting extends GraphicsProgram {
 	private JButton topScale;
 	private JButton redTopSwitch;
 	private JButton blueTopSwitch;
+	private JButton redPark;
+	private JButton bluePark;
 
 	public void run() {
 		initiation();
@@ -113,60 +114,59 @@ public class Scouting extends GraphicsProgram {
 	 * Makes the game elements that can earn points.
 	 **/
 	private void addFieldComponents() {
-		blueLine = new JButton(new ImageIcon("res/blueLine.JPG"));
-		blueLine.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		blueLine = new JButton();
+		blueLine.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		blueLine.setContentAreaFilled(true);
-		blueLine.addMouseListener(this);
-		blueRung = new JButton(new ImageIcon("res/blueRung.JPG"));
-		blueRung.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		blueRung = new JButton();
+		blueRung.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		blueRung.setContentAreaFilled(true);
-		blueRung.addMouseListener(this);
-		blueVault = new JButton(new ImageIcon("res/blueVault.JPG"));
-		blueVault.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		blueVault.setContentAreaFilled(true);
-		blueVault.addMouseListener(this);
-		bottomScale = new JButton(new ImageIcon("res/bottomScale.JPG"));
+		blueVault = new JButton("Vault");
+		blueVault.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+		blueVault.setBackground(Color.BLUE);
+		bottomScale = new JButton("Scale");
 		bottomScale.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		bottomScale.setBackground(Color.BLUE);
-		bottomScale.addMouseListener(this);
-		blueBottomSwitch = new JButton();
+		blueBottomSwitch = new JButton("Switch");
 		blueBottomSwitch.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		blueBottomSwitch.setOpaque(true);
 		blueBottomSwitch.setBackground(Color.BLUE);
-		blueBottomSwitch.addMouseListener(this);
-		redBottomSwitch = new JButton();
+		redBottomSwitch = new JButton("Switch");
 		redBottomSwitch.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		redBottomSwitch.setOpaque(true);
 		redBottomSwitch.setBackground(Color.BLUE);
-		redBottomSwitch.addMouseListener(this);
-		redLine = new JButton(new ImageIcon("res/redLine.JPG"));
-		redLine.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		redLine = new JButton();
+		redLine.setBorder(BorderFactory.createLineBorder(Color.RED));
 		redLine.setContentAreaFilled(true);
-		redLine.addMouseListener(this);
-		redRung = new JButton(new ImageIcon("res/redRung.JPG"));
-		redRung.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		redRung = new JButton();
+		redRung.setBorder(BorderFactory.createLineBorder(Color.RED));
 		redRung.setContentAreaFilled(true);
-		redRung.addMouseListener(this);
-		redVault = new JButton(new ImageIcon("res/redVault.JPG"));
-		redVault.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		redVault.setContentAreaFilled(true);
-		redVault.addMouseListener(this);
-		topScale = new JButton(new ImageIcon("res/topScale.JPG"));
+		redVault = new JButton("Vault");
+		redVault.setBorder(BorderFactory.createLineBorder(Color.RED));
+		redVault.setBackground(Color.RED);
+		topScale = new JButton("Scale");
 		topScale.setBorder(BorderFactory.createLineBorder(Color.RED));
-		bottomScale.setBackground(Color.RED);
-		topScale.addMouseListener(this);
-		blueTopSwitch = new JButton();
+		topScale.setBackground(Color.RED);
+		blueTopSwitch = new JButton("Switch");
 		blueTopSwitch.setBorder(BorderFactory.createLineBorder(Color.RED));
 		blueTopSwitch.setOpaque(true);
 		blueTopSwitch.setBackground(Color.RED);
-		blueTopSwitch.addMouseListener(this);
-		redTopSwitch = new JButton();
+		redTopSwitch = new JButton("Switch");
 		redTopSwitch.setBorder(BorderFactory.createLineBorder(Color.RED));
 		redTopSwitch.setOpaque(true);
 		redTopSwitch.setBackground(Color.RED);
-		redTopSwitch.addMouseListener(this);
-		addMouseListeners();
+		redPark = new JButton("Park");
+		redPark.setBorder(BorderFactory.createLineBorder(Color.RED));
+		redPark.setOpaque(true);
+		redPark.setBackground(Color.RED);
+		bluePark = new JButton("Park");
+		bluePark.setBorder(BorderFactory.createLineBorder(Color.RED));
+		bluePark.setOpaque(true);
+		bluePark.setBackground(Color.RED);
 
+		redPark.setSize(40, 100);
+		canvas.add(redPark, 430, 190);
+		bluePark.setSize(40, 100);
+		canvas.add(bluePark, 535, 190);
 		blueLine.setSize(10, 410);
 		canvas.add(blueLine, 720, 40);
 		blueRung.setSize(20, 30);
@@ -280,16 +280,17 @@ public class Scouting extends GraphicsProgram {
 			autoRun = null;
 			autoSwitch = 0;
 			autoScale = 0;
-			mySwitch = 0;
-			oppSwitch = 0;
-			teleopScale = 0;
+			teleSwitch = 0;
+			teleScale = 0;
 			vault = 0;
 			climb = null;
 			parked = null;
 		} else if (event.getSource() == submit) {
-			if (matchNumber != null && teamNumber != null) {
+			// sends the data over
+			if (gameOn && matchNumber != null && teamNumber != null) {
 				gameOn = false;
 				isAuton = true;
+				submitData();
 				mode.setSelectedIndex(0);
 				matchNum.setText("");
 				red1.setText("");
@@ -304,9 +305,8 @@ public class Scouting extends GraphicsProgram {
 				autoRun = null;
 				autoSwitch = 0;
 				autoScale = 0;
-				mySwitch = 0;
-				oppSwitch = 0;
-				teleopScale = 0;
+				teleSwitch = 0;
+				teleScale = 0;
 				vault = 0;
 				parked = null;
 			}
@@ -318,15 +318,77 @@ public class Scouting extends GraphicsProgram {
 		}
 		if (gameOn) {
 			if (isAuton) {
+				// autonomous mode
 				if (event.getSource() == blueLine || event.getSource() == redLine) {
 					autoRun = true;
 				}
-				// if (event.getSource() == )
+				if (isRed) {
+					// on red alliance
+					if (event.getSource() == redTopSwitch || event.getSource() == blueTopSwitch) {
+						autoSwitch++;
+					}
+					if (event.getSource() == topScale) {
+						autoScale++;
+					}
+				} else {
+					// on the blue alliance
+					if (event.getSource() == redBottomSwitch || event.getSource() == blueBottomSwitch) {
+						autoSwitch++;
+					}
+					if (event.getSource() == bottomScale) {
+						autoScale++;
+					}
+				}
 			} else {
-
+				// teleop
+				if (isRed) {
+					// on red alliance
+					if (event.getSource() == redTopSwitch || event.getSource() == blueTopSwitch) {
+						teleSwitch++;
+					}
+					if (event.getSource() == topScale) {
+						teleScale++;
+					}
+					if (event.getSource() == redVault) {
+						vault++;
+					}
+				} else {
+					// on the blue alliance
+					if (event.getSource() == redBottomSwitch || event.getSource() == blueBottomSwitch) {
+						teleSwitch++;
+					}
+					if (event.getSource() == bottomScale) {
+						teleScale++;
+					}
+					if (event.getSource() == blueVault) {
+						vault++;
+					}
+				}
+				// end game
+				if (isRed) {
+					if (event.getSource() == redPark) {
+						parked = true;
+					}
+					if (event.getSource() == redRung) {
+						climb = true;
+					}
+				} else {
+					if (event.getSource() == bluePark) {
+						parked = true;
+					}
+					if (event.getSource() == blueRung) {
+						climb = true;
+					}
+				}
 			}
 		}
 
+	}
+
+	/*
+	 * Sends the stats of one match to an excel spreadsheet
+	 */
+	private void submitData() {
 	}
 
 }
