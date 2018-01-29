@@ -3,6 +3,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -37,16 +39,18 @@ public class Scouting extends GraphicsProgram {
 	private JButton start;
 	private JButton reset;
 	private JButton submit;
-	private GImage blueLine;
-	private GImage blueRung;
-	private GImage blueVault;
-	private GImage bottomScale;
-	private GImage bottomSwitch;
-	private GImage redLine;
-	private GImage redRung;
-	private GImage redVault;
-	private GImage topScale;
-	private GImage topSwitch;
+	private JButton blueLine;
+	private JButton blueRung;
+	private JButton blueVault;
+	private JButton bottomScale;
+	private JButton redBottomSwitch;
+	private JButton blueBottomSwitch;
+	private JButton redLine;
+	private JButton redRung;
+	private JButton redVault;
+	private JButton topScale;
+	private JButton redTopSwitch;
+	private JButton blueTopSwitch;
 
 	public void run() {
 		initiation();
@@ -99,26 +103,54 @@ public class Scouting extends GraphicsProgram {
 	 * Makes the game elements that can earn points.
 	 **/
 	private void addFieldComponents() {
-		blueLine = new GImage("res/blueLine.JPG");
+		blueLine = new JButton(new ImageIcon("res/blueLine.JPG"));
+		blueLine.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		blueLine.setContentAreaFilled(true);
 		blueLine.addMouseListener(this);
-		blueRung = new GImage("res/blueRung.JPG");
+		blueRung = new JButton(new ImageIcon("res/blueRung.JPG"));
+		blueRung.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		blueRung.setContentAreaFilled(true);
 		blueRung.addMouseListener(this);
-		blueVault = new GImage("res/blueVault.JPG");
+		blueVault = new JButton(new ImageIcon("res/blueVault.JPG"));
+		blueVault.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		blueVault.setContentAreaFilled(true);
 		blueVault.addMouseListener(this);
-		bottomScale = new GImage("res/bottomScale.JPG");
+		bottomScale = new JButton(new ImageIcon("res/bottomScale.JPG"));
+		bottomScale.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		bottomScale.setContentAreaFilled(true);
 		bottomScale.addMouseListener(this);
-		bottomSwitch = new GImage("res/bottomSwitch.JPG");
-		bottomSwitch.addMouseListener(this);
-		redLine = new GImage("res/redLine.JPG");
+		blueBottomSwitch = new JButton(new ImageIcon("res/bottomSwitch.JPG"));
+		blueBottomSwitch.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		blueBottomSwitch.setContentAreaFilled(true);
+		blueBottomSwitch.addMouseListener(this);
+		redBottomSwitch = new JButton(new ImageIcon("res/bottomSwitch.JPG"));
+		redBottomSwitch.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		redBottomSwitch.setContentAreaFilled(true);
+		redBottomSwitch.addMouseListener(this);
+		redLine = new JButton(new ImageIcon("res/redLine.JPG"));
+		redLine.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		redLine.setContentAreaFilled(true);
 		redLine.addMouseListener(this);
-		redRung = new GImage("res/redRung.JPG");
+		redRung = new JButton(new ImageIcon("res/redRung.JPG"));
+		redRung.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		redRung.setContentAreaFilled(true);
 		redRung.addMouseListener(this);
-		redVault = new GImage("res/redVault.JPG");
+		redVault = new JButton(new ImageIcon("res/redVault.JPG"));
+		redVault.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		redVault.setContentAreaFilled(true);
 		redVault.addMouseListener(this);
-		topScale = new GImage("res/topScale.JPG");
+		topScale = new JButton(new ImageIcon("res/topScale.JPG"));
+		topScale.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		topScale.setContentAreaFilled(true);
 		topScale.addMouseListener(this);
-		topSwitch = new GImage("res/topSwitch.JPG");
-		topSwitch.addMouseListener(this);
+		blueTopSwitch = new JButton(new ImageIcon("res/topSwitch.JPG"));
+		blueTopSwitch.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		blueTopSwitch.setContentAreaFilled(true);
+		blueTopSwitch.addMouseListener(this);
+		redTopSwitch = new JButton(new ImageIcon("res/topSwitch.JPG"));
+		redTopSwitch.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		redTopSwitch.setContentAreaFilled(true);
+		redTopSwitch.addMouseListener(this);
 		addMouseListeners();
 
 		blueLine.setSize(10, 410);
@@ -129,9 +161,10 @@ public class Scouting extends GraphicsProgram {
 		canvas.add(blueVault, 810, 255);
 		bottomScale.setSize(60, 45);
 		canvas.add(bottomScale, 470, 297);
-		bottomSwitch.setSize(65, 50);
-		canvas.add(bottomSwitch, 300, 280);
-		canvas.add(bottomSwitch, 640, 280);
+		blueBottomSwitch.setSize(65, 50);
+		redBottomSwitch.setSize(65, 50);
+		canvas.add(redBottomSwitch, 300, 280);
+		canvas.add(blueBottomSwitch, 640, 280);
 		redLine.setSize(10, 410);
 		canvas.add(redLine, 274, 40);
 		redRung.setSize(20, 30);
@@ -140,9 +173,10 @@ public class Scouting extends GraphicsProgram {
 		canvas.add(redVault, 115, 170);
 		topScale.setSize(60, 45);
 		canvas.add(topScale, 474, 144);
-		topSwitch.setSize(65, 50);
-		canvas.add(topSwitch, 300, 156);
-		canvas.add(topSwitch, 640, 157);
+		blueTopSwitch.setSize(65, 50);
+		redTopSwitch.setSize(65, 50);
+		canvas.add(redTopSwitch, 300, 156);
+		canvas.add(blueTopSwitch, 640, 157);
 	}
 
 	/**
@@ -186,14 +220,6 @@ public class Scouting extends GraphicsProgram {
 	public void mousePressed(MouseEvent event) {
 		// Java runs this when the mouse is clicked
 		System.out.println("Mouse position: " + event.getX() + ", " + event.getY());
-
-		if (getElementAt(event.getX(), event.getY()) == blueVault) {
-			System.out.println("Blue Vault scored");
-		} else if (getElementAt(event.getX(), event.getY()) == bottomScale) {
-			System.out.println("Bottom scale scored");
-		} else if (getElementAt(event.getX(), event.getY()) == bottomSwitch) {
-			System.out.println("Bottom switch scored");
-		}
 	}
 
 	/**
