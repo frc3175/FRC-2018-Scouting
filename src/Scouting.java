@@ -28,9 +28,6 @@ public class Scouting extends GraphicsProgram {
 	/** True after clicking the start button **/
 	private boolean gameOn;
 
-	/** First 15 seconds of the match **/
-	private boolean isAuton;
-
 	// data to record
 	private String matchNumber = null;
 	private Boolean isRed = null;
@@ -174,9 +171,9 @@ public class Scouting extends GraphicsProgram {
 		redPark.setOpaque(true);
 		redPark.setBackground(Color.RED);
 		bluePark = new JButton("Park");
-		bluePark.setBorder(BorderFactory.createLineBorder(Color.RED));
+		bluePark.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		bluePark.setOpaque(true);
-		bluePark.setBackground(Color.RED);
+		bluePark.setBackground(Color.BLUE);
 
 		redPark.setSize(40, 100);
 		canvas.add(redPark, 430, 190);
@@ -206,6 +203,8 @@ public class Scouting extends GraphicsProgram {
 		redTopSwitch.setSize(65, 50);
 		canvas.add(redTopSwitch, 300, 156);
 		canvas.add(blueTopSwitch, 640, 157);
+
+		addActionListeners();
 	}
 
 	/**
@@ -226,7 +225,8 @@ public class Scouting extends GraphicsProgram {
 		String[] modes = { "Pending", "Autonomous", "Teleop" };
 		mode = new JComboBox(modes);
 		mode.setSelectedIndex(0);
-
+		//mode.addActionListener(this);
+		
 		canvas.add(matchNum, 100, 10);
 		canvas.add(mode, getWidth() / 2, 10);
 		canvas.add(red1, 20, 145);
@@ -251,7 +251,6 @@ public class Scouting extends GraphicsProgram {
 			// When the match starts
 			if (!matchNum.getText().equals("")) {
 				gameOn = true;
-				isAuton = true;
 				mode.setSelectedIndex(1);
 				matchNumber = matchNum.getText();
 				if (!red1.getText().equals("")) {
@@ -282,7 +281,6 @@ public class Scouting extends GraphicsProgram {
 		} else if (event.getSource() == reset) {
 			// When the match resets
 			gameOn = false;
-			isAuton = true;
 			mode.setSelectedIndex(0);
 			matchNum.setText("");
 			red1.setText("");
@@ -307,7 +305,6 @@ public class Scouting extends GraphicsProgram {
 			if (gameOn && matchNumber != null && teamNumber != null && mode.getSelectedIndex() == 2) {
 				count++;
 				gameOn = false;
-				isAuton = true;
 				try {
 					writeData();
 				} catch (IOException e) {
@@ -333,74 +330,80 @@ public class Scouting extends GraphicsProgram {
 				parked = false;
 				climb = false;
 			}
-		} else if (event.getSource() == mode) {
-			if (mode.getSelectedIndex() == 2) {
-				// TeleOp mode
-				isAuton = false;
-			}
-		}
+		} 
 		if (gameOn) {
-			if (isAuton) {
+			if (mode.getSelectedIndex() == 1) {
 				// autonomous mode
 				if (event.getSource() == blueLine || event.getSource() == redLine) {
 					autoRun = true;
+					System.out.println("Auton crossed");
 				}
 				if (isRed) {
 					// on red alliance
 					if (event.getSource() == redTopSwitch || event.getSource() == blueTopSwitch) {
 						autoSwitch++;
+						System.out.println("Switch");
 					}
 					if (event.getSource() == topScale) {
 						autoScale++;
+						System.out.print("Scale");
 					}
 				} else {
 					// on the blue alliance
 					if (event.getSource() == redBottomSwitch || event.getSource() == blueBottomSwitch) {
 						autoSwitch++;
+						System.out.println("Switch");
 					}
 					if (event.getSource() == bottomScale) {
 						autoScale++;
+						System.out.print("Scale");
 					}
 				}
-			} else {
+			} else if (mode.getSelectedIndex() == 2) {
 				// teleop
 				if (isRed) {
 					// on red alliance
 					if (event.getSource() == redTopSwitch || event.getSource() == blueTopSwitch) {
 						teleSwitch++;
+						System.out.println("Switch");
 					}
 					if (event.getSource() == topScale) {
 						teleScale++;
+						System.out.print("Scale");
 					}
 					if (event.getSource() == redVault) {
 						vault++;
+						System.out.println("Vault");
+					}
+					if (event.getSource() == redPark) {
+						parked = true;
+						System.out.println("Parked");
+					}
+					if (event.getSource() == redRung) {
+						climb = true;
+						System.out.println("Climbed");
 					}
 				} else {
 					// on the blue alliance
 					if (event.getSource() == redBottomSwitch || event.getSource() == blueBottomSwitch) {
 						teleSwitch++;
+						System.out.println("Switch");
 					}
 					if (event.getSource() == bottomScale) {
 						teleScale++;
+						System.out.print("Scale");
 					}
 					if (event.getSource() == blueVault) {
 						vault++;
+						System.out.println("Vault");
 					}
-				}
-				// end game
-				if (isRed) {
-					if (event.getSource() == redPark) {
-						parked = true;
-					}
-					if (event.getSource() == redRung) {
-						climb = true;
-					}
-				} else {
 					if (event.getSource() == bluePark) {
 						parked = true;
+						System.out.println("Parked");
 					}
 					if (event.getSource() == blueRung) {
 						climb = true;
+						System.out.println("Climbed");
 					}
 				}
 			}
@@ -414,6 +417,10 @@ public class Scouting extends GraphicsProgram {
 	private void writeData() throws IOException {
 		String[] data = { matchNumber, teamNumber, autoRun.toString(), autoSwitch.toString(), autoScale.toString(),
 				vault.toString(), teleSwitch.toString(), teleScale.toString(), parked.toString(), climb.toString() };
+		System.out.println("Match Number: " + matchNumber + "Team Number: " + teamNumber + "Auton Crossing "
+				+ autoRun.toString() + "Auton Switch " + autoSwitch.toString() + "Auton Scale " + autoScale.toString()
+				+ "Vaults " + vault.toString() + "Teleop Switch " + teleSwitch.toString() + "Teleop Scale "
+				+ teleScale.toString() + "Parked " + parked.toString() + "Climbed " + climb.toString());
 		inputStream = new FileInputStream(new File("res/data.xls"));
 		Workbook workbook = new HSSFWorkbook(inputStream);
 		Sheet firstSheet = workbook.getSheetAt(0);
