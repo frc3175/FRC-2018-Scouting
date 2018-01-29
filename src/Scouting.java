@@ -22,9 +22,19 @@ public class Scouting extends GraphicsProgram {
 	/** First 15 seconds of the match **/
 	private boolean isAuton;
 
+	// data to record
 	private String matchNumber = null;
 	private Boolean isRed = null;
 	private String teamNumber = null;
+	private Boolean autoRun = null;
+	private Integer autoSwitch = 0;
+	private Integer autoScale = 0;
+	private Integer mySwitch = 0;
+	private Integer oppSwitch = 0;
+	private Integer teleopScale = 0;
+	private Integer vault = 0;
+	private Boolean climb = null;
+	private Boolean parked = null;
 
 	// All the interactors that will be called more than once
 	private GCanvas canvas = new GCanvas();
@@ -116,16 +126,18 @@ public class Scouting extends GraphicsProgram {
 		blueVault.setContentAreaFilled(true);
 		blueVault.addMouseListener(this);
 		bottomScale = new JButton(new ImageIcon("res/bottomScale.JPG"));
-		bottomScale.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		bottomScale.setContentAreaFilled(true);
+		bottomScale.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+		bottomScale.setBackground(Color.BLUE);
 		bottomScale.addMouseListener(this);
-		blueBottomSwitch = new JButton(new ImageIcon("res/bottomSwitch.JPG"));
-		blueBottomSwitch.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		blueBottomSwitch.setContentAreaFilled(true);
+		blueBottomSwitch = new JButton();
+		blueBottomSwitch.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+		blueBottomSwitch.setOpaque(true);
+		blueBottomSwitch.setBackground(Color.BLUE);
 		blueBottomSwitch.addMouseListener(this);
-		redBottomSwitch = new JButton(new ImageIcon("res/bottomSwitch.JPG"));
-		redBottomSwitch.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		redBottomSwitch.setContentAreaFilled(true);
+		redBottomSwitch = new JButton();
+		redBottomSwitch.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+		redBottomSwitch.setOpaque(true);
+		redBottomSwitch.setBackground(Color.BLUE);
 		redBottomSwitch.addMouseListener(this);
 		redLine = new JButton(new ImageIcon("res/redLine.JPG"));
 		redLine.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -140,16 +152,18 @@ public class Scouting extends GraphicsProgram {
 		redVault.setContentAreaFilled(true);
 		redVault.addMouseListener(this);
 		topScale = new JButton(new ImageIcon("res/topScale.JPG"));
-		topScale.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		topScale.setContentAreaFilled(true);
+		topScale.setBorder(BorderFactory.createLineBorder(Color.RED));
+		bottomScale.setBackground(Color.RED);
 		topScale.addMouseListener(this);
-		blueTopSwitch = new JButton(new ImageIcon("res/topSwitch.JPG"));
-		blueTopSwitch.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		blueTopSwitch.setContentAreaFilled(true);
+		blueTopSwitch = new JButton();
+		blueTopSwitch.setBorder(BorderFactory.createLineBorder(Color.RED));
+		blueTopSwitch.setOpaque(true);
+		blueTopSwitch.setBackground(Color.RED);
 		blueTopSwitch.addMouseListener(this);
-		redTopSwitch = new JButton(new ImageIcon("res/topSwitch.JPG"));
-		redTopSwitch.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		redTopSwitch.setContentAreaFilled(true);
+		redTopSwitch = new JButton();
+		redTopSwitch.setBorder(BorderFactory.createLineBorder(Color.RED));
+		redTopSwitch.setOpaque(true);
+		redTopSwitch.setBackground(Color.RED);
 		redTopSwitch.addMouseListener(this);
 		addMouseListeners();
 
@@ -214,15 +228,6 @@ public class Scouting extends GraphicsProgram {
 	}
 
 	/**
-	 * Adds to the score when clicked.
-	 **/
-	@Override
-	public void mousePressed(MouseEvent event) {
-		// Java runs this when the mouse is clicked
-		System.out.println("Mouse position: " + event.getX() + ", " + event.getY());
-	}
-
-	/**
 	 * Listens for and responds to action commands.
 	 **/
 	@Override
@@ -269,29 +274,58 @@ public class Scouting extends GraphicsProgram {
 			blue1.setText("");
 			blue2.setText("");
 			blue3.setText("");
+			matchNumber = null;
+			isRed = null;
+			teamNumber = null;
+			autoRun = null;
+			autoSwitch = 0;
+			autoScale = 0;
+			mySwitch = 0;
+			oppSwitch = 0;
+			teleopScale = 0;
+			vault = 0;
+			climb = null;
+			parked = null;
 		} else if (event.getSource() == submit) {
-			gameOn = false;
-			isAuton = true;
-			mode.setSelectedIndex(0);
-			matchNum.setText("");
-			red1.setText("");
-			red2.setText("");
-			red3.setText("");
-			blue1.setText("");
-			blue2.setText("");
-			blue3.setText("");
+			if (matchNumber != null && teamNumber != null) {
+				gameOn = false;
+				isAuton = true;
+				mode.setSelectedIndex(0);
+				matchNum.setText("");
+				red1.setText("");
+				red2.setText("");
+				red3.setText("");
+				blue1.setText("");
+				blue2.setText("");
+				blue3.setText("");
+				matchNumber = null;
+				isRed = null;
+				teamNumber = null;
+				autoRun = null;
+				autoSwitch = 0;
+				autoScale = 0;
+				mySwitch = 0;
+				oppSwitch = 0;
+				teleopScale = 0;
+				vault = 0;
+				parked = null;
+			}
 		} else if (event.getSource() == mode) {
 			if (mode.getSelectedIndex() == 3) {
 				// TeleOp mode
 				isAuton = false;
 			}
 		}
-	}
+		if (gameOn) {
+			if (isAuton) {
+				if (event.getSource() == blueLine || event.getSource() == redLine) {
+					autoRun = true;
+				}
+				// if (event.getSource() == )
+			} else {
 
-	/**
-	 * Keep statistics for one match.
-	 **/
-	private void recordOneGame() {
+			}
+		}
 
 	}
 
