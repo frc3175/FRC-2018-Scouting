@@ -1,25 +1,15 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 import java.util.Iterator;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import javax.swing.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import acm.graphics.GCanvas;
-import acm.graphics.GImage;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import acm.graphics.*;
 import acm.program.GraphicsProgram;
 import acm.program.GraphicsProgramInterface;
 
@@ -69,11 +59,14 @@ public class Scouting extends GraphicsProgram {
 	private JButton redPark;
 	private JButton bluePark;
 
-	private int count = 2;
 	private FileInputStream inputStream;
 	private Workbook workbook;
 	private Sheet firstSheet;
 	private Iterator<Row> iterator;
+
+	public static void main(String[] args) {
+		(new Scouting()).start(args);
+	}
 
 	public void run() {
 		initiation();
@@ -225,8 +218,8 @@ public class Scouting extends GraphicsProgram {
 		String[] modes = { "Pending", "Autonomous", "Teleop" };
 		mode = new JComboBox(modes);
 		mode.setSelectedIndex(0);
-		//mode.addActionListener(this);
-		
+		// mode.addActionListener(this);
+
 		canvas.add(matchNum, 100, 10);
 		canvas.add(mode, getWidth() / 2, 10);
 		canvas.add(red1, 20, 145);
@@ -303,12 +296,12 @@ public class Scouting extends GraphicsProgram {
 		} else if (event.getSource() == submit) {
 			// sends the data over
 			if (gameOn && matchNumber != null && teamNumber != null && mode.getSelectedIndex() == 2) {
-				count++;
 				gameOn = false;
 				try {
 					writeData();
 				} catch (IOException e) {
-					System.out.print(e);
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				mode.setSelectedIndex(0);
 				matchNum.setText("");
@@ -330,7 +323,7 @@ public class Scouting extends GraphicsProgram {
 				parked = false;
 				climb = false;
 			}
-		} 
+		}
 		if (gameOn) {
 			if (mode.getSelectedIndex() == 1) {
 				// autonomous mode
@@ -417,25 +410,31 @@ public class Scouting extends GraphicsProgram {
 	private void writeData() throws IOException {
 		String[] data = { matchNumber, teamNumber, autoRun.toString(), autoSwitch.toString(), autoScale.toString(),
 				vault.toString(), teleSwitch.toString(), teleScale.toString(), parked.toString(), climb.toString() };
-		System.out.println("Match Number: " + matchNumber + "Team Number: " + teamNumber + "Auton Crossing "
-				+ autoRun.toString() + "Auton Switch " + autoSwitch.toString() + "Auton Scale " + autoScale.toString()
-				+ "Vaults " + vault.toString() + "Teleop Switch " + teleSwitch.toString() + "Teleop Scale "
-				+ teleScale.toString() + "Parked " + parked.toString() + "Climbed " + climb.toString());
-		inputStream = new FileInputStream(new File("res/data.xls"));
-		Workbook workbook = new HSSFWorkbook(inputStream);
-		Sheet firstSheet = workbook.getSheetAt(0);
-		Row row = firstSheet.createRow(count);
-		int col = 0;
+		System.out.println("Match Number: " + matchNumber + " Team Number: " + teamNumber + " Auton Crossing "
+				+ autoRun.toString() + " Auton Switch " + autoSwitch.toString() + " Auton Scale " + autoScale.toString()
+				+ " Vaults " + vault.toString() + " Teleop Switch " + teleSwitch.toString() + " Teleop Scale "
+				+ teleScale.toString() + " Parked " + parked.toString() + " Climbed " + climb.toString());
+		// Read Excel document first
+		FileInputStream input = new FileInputStream(new File("res/data.xlsx"));
+		// convert it into a POI object
+		XSSFWorkbook workbook = new XSSFWorkbook(input);
+		// Read excel sheet that needs to be updated
+		XSSFSheet worksheet = workbook.getSheetAt(0);
+		int rowNum = worksheet.getPhysicalNumberOfRows();
+		// close InputStream
+		input.close();
+		Row row = worksheet.createRow(rowNum);
+		int colNum = 0;
 		for (String stat : data) {
-			Cell cell = row.createCell(++col);
+			Cell cell = row.createCell(colNum++);
 			cell.setCellValue(stat);
 		}
-		try (FileOutputStream outputStream = new FileOutputStream("res/data.xls")) {
-			workbook.write(outputStream);
-		} catch (Exception ex) {
-			System.out.println(ex);
-		}
-		workbook.close();
+		// Open FileOutputStream to write updates
+		FileOutputStream output = new FileOutputStream(new File("res/data.xlsx"));
+		// write changes
+		workbook.write(output);
+		// close the stream
+		output.close();
 	}
 
 }
