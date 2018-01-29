@@ -7,16 +7,16 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import acm.graphics.GCanvas;
 import acm.graphics.GImage;
-import acm.graphics.GLabel;
-import acm.program.ConsoleProgram;
 import acm.program.GraphicsProgram;
 
 public class Scouting extends GraphicsProgram {
 
-	private boolean gameOn; // true after clicking the start button
-	private boolean isAuton; // first 15 seconds of the match
+	@SuppressWarnings("unused")
+	private boolean gameOn; // True after clicking the start button
+	@SuppressWarnings("unused")
+	private boolean isAuton; // First 15 seconds of the match
 
-	// all the interactors that will be called more than once
+	// All the interactors that will be called more than once
 	private GCanvas canvas = new GCanvas();
 	private JTextField matchNum = new JTextField(5);
 	private JTextField red1;
@@ -111,8 +111,7 @@ public class Scouting extends GraphicsProgram {
 			gameOn = true;
 			isAuton = true;
 			
-		}
-		if (event.getSource() == reset) {
+		} else if (event.getSource() == reset) {
 			// when the match resets
 		}
 	}
