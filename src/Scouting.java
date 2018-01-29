@@ -43,9 +43,9 @@ public class Scouting extends GraphicsProgram {
 	}
 
 	
-	/*
-	 * Adds all the graphics to canvas in the beginning
-	 */
+	/**
+	 * Adds all graphics to the canvas in the beginning.
+	 **/
 	private void initiation() {
 		setCanvasSize(1000, 457);
 		canvas.setSize(1000, 457);
@@ -102,24 +102,24 @@ public class Scouting extends GraphicsProgram {
 	}
 
 	
-	/*
-	 * listens for and responds to action commands
-	 */
+	/**
+	 * Listens for and responds to action commands.
+	 **/
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == start) {
-			// when the match starts
+			// When the match starts
 			gameOn = true;
 			isAuton = true;
 			
 		} else if (event.getSource() == reset) {
-			// when the match resets
+			// When the match resets
 		}
 	}
 
 	
-	/*
-	 * Keep stats for one match
-	 */
+	/**
+	 * Keep statistics for one match.
+	 **/
 	private void recordOneGame() {
 		
 	}
