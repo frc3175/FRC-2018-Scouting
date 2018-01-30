@@ -35,7 +35,7 @@ This is our first attempt at making a scouting app. Please make any good suggest
 
 ## Authors
 
-* **Tony Pan** -  [University Liggett School](https://uls.org)
+* **[Tony Pan](https://github.com/tonypan2000)** -  [University Liggett School](https://www.uls.org) - [Twitter](https://twitter.com/tonypan2000)
 
 * Special thank you to [Aaron Meese](https://github.com/ajmeese7)
 
