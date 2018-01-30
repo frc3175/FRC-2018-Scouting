@@ -59,11 +59,6 @@ public class Scouting extends GraphicsProgram {
 	private JButton redPark;
 	private JButton bluePark;
 
-	private FileInputStream inputStream;
-	private Workbook workbook;
-	private Sheet firstSheet;
-	private Iterator<Row> iterator;
-
 	public static void main(String[] args) {
 		(new Scouting()).start(args);
 	}
