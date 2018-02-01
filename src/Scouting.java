@@ -40,7 +40,7 @@ public class Scouting extends GraphicsProgram {
 	private JTextField blue1;
 	private JTextField blue2;
 	private JTextField blue3;
-	private JComboBox mode;
+	private JComboBox<String> mode;
 	private JButton start;
 	private JButton reset;
 	private JButton submit;
@@ -211,9 +211,8 @@ public class Scouting extends GraphicsProgram {
 		blue3 = new JTextField(10);
 
 		String[] modes = { "Pending", "Autonomous", "Teleop" };
-		mode = new JComboBox(modes);
+		mode = new JComboBox<String>(modes);
 		mode.setSelectedIndex(0);
-		// mode.addActionListener(this);
 
 		canvas.add(matchNum, 100, 10);
 		canvas.add(mode, getWidth() / 2, 10);
@@ -428,6 +427,7 @@ public class Scouting extends GraphicsProgram {
 		FileOutputStream output = new FileOutputStream(new File("res/data.xlsx"));
 		// write changes
 		workbook.write(output);
+		workbook.close();
 		// close the stream
 		output.close();
 	}
