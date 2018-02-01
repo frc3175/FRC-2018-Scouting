@@ -240,7 +240,8 @@ public class Scouting extends GraphicsProgram {
 			if (!matchNum.getText().equals("")) {
 				gameOn = true;
 				mode.setSelectedIndex(mode.getSelectedIndex() == 0 ? 1 : 2);
-				if (mode.getSelectedIndex > 0) mode.setText("Next Mode");
+				if (mode.getSelectedIndex() > 0) start.setText("Next Mode");
+				if (mode.getSelectedIndex() == 2) start.setEnabled(false);
 				matchNumber = matchNum.getText();
 				if (!red1.getText().equals("")) {
 					isRed = true;
