@@ -238,7 +238,9 @@ public class Scouting extends GraphicsProgram {
 			// When the match starts
 			if (!matchNum.getText().equals("")) {
 				gameOn = true;
-				mode.setSelectedIndex(1);
+				mode.setSelectedIndex(mode.getSelectedIndex() == 0 ? 1 : 2);
+				if (mode.getSelectedIndex() > 0) start.setText("Next Mode");
+				if (mode.getSelectedIndex() == 2) start.setEnabled(false);
 				matchNumber = matchNum.getText();
 				if (!red1.getText().equals("")) {
 					isRed = true;
@@ -268,6 +270,7 @@ public class Scouting extends GraphicsProgram {
 		} else if (event.getSource() == reset) {
 			// When the match resets
 			gameOn = false;
+			start.setText("Start");
 			mode.setSelectedIndex(0);
 			matchNum.setText("");
 			red1.setText("");
