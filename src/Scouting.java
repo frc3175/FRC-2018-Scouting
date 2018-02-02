@@ -239,8 +239,10 @@ public class Scouting extends GraphicsProgram {
 			if (!matchNum.getText().equals("")) {
 				gameOn = true;
 				mode.setSelectedIndex(mode.getSelectedIndex() == 0 ? 1 : 2);
-				if (mode.getSelectedIndex() > 0) start.setText("Next Mode");
-				if (mode.getSelectedIndex() == 2) start.setEnabled(false);
+				if (mode.getSelectedIndex() > 0)
+					start.setText("Next Mode");
+				if (mode.getSelectedIndex() == 2)
+					start.setEnabled(false);
 				matchNumber = matchNum.getText();
 				if (!red1.getText().equals("")) {
 					isRed = true;
@@ -271,6 +273,7 @@ public class Scouting extends GraphicsProgram {
 			// When the match resets
 			gameOn = false;
 			start.setText("Start");
+			start.setEnabled(true);
 			mode.setSelectedIndex(0);
 			matchNum.setText("");
 			red1.setText("");
@@ -297,7 +300,6 @@ public class Scouting extends GraphicsProgram {
 				try {
 					writeData();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				mode.setSelectedIndex(0);
@@ -319,6 +321,7 @@ public class Scouting extends GraphicsProgram {
 				vault = 0;
 				parked = false;
 				climb = false;
+				start.setEnabled(true);
 			}
 		}
 		if (gameOn) {
