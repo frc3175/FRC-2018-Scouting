@@ -60,6 +60,7 @@ public class Scouting extends GraphicsProgram {
 	private JButton blueTopSwitch;
 	private JButton redPark;
 	private JButton bluePark;
+	private GRect modeRect;
 
 	public static void main(String[] args) {
 		(new Scouting()).start(args);
@@ -217,10 +218,13 @@ public class Scouting extends GraphicsProgram {
 		mode.setForeground(Color.RED);
 		mode.setFont(new Font("Serif", Font.BOLD, 16));
 		mode.setSelectedIndex(0);
-		mode.setVisible(true);
+		mode.setBounds(getWidth() / 2, 10, 100, 25);
+		mode.setOpaque(true);
+		mode.setBackground(Color.GRAY);
 
 		canvas.add(matchNum, 100, 10);
 		canvas.add(mode, getWidth() / 2, 10);
+		mode.setVisible(true);
 		canvas.add(red1, 20, 145);
 		canvas.add(red2, 20, 240);
 		canvas.add(red3, 20, 335);
