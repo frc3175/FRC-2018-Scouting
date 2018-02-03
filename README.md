@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-You will need [Java](https://java.com/en/) and Excel (2007 and later) for this applet.
+You will need [Java](https://java.com/en/) and Excel (2007 and later) (also works for Numbers for Mac users) for this applet.
 
 
 ### Installing
@@ -24,7 +24,7 @@ The data are stored in data.xlsx as a short cut.
 It takes six users to enter data for each match.
 Enter the match number and the team number in the corresponding alliance station.
 Click the start button to start and click on game elements when the robot scores (color does matter).
-Select Teleop from the drop down box when it is time.
+Select Teleop from the drop down box or simply click the next mode button when it is time.
 If something went wrong in a match, click reset to discard data for that match.
 When the match is over, click submit to write the data to the excel file.
 Compile and analyze the excel data sheets to find your pick for alliance selection.
