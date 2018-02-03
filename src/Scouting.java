@@ -218,7 +218,6 @@ public class Scouting extends GraphicsProgram {
 		mode.setForeground(Color.RED);
 		mode.setFont(new Font("Serif", Font.BOLD, 16));
 		mode.setSelectedIndex(0);
-		mode.setBounds(getWidth() / 2, 10, 100, 25);
 		mode.setOpaque(true);
 		mode.setBackground(Color.GRAY);
 
