@@ -3,6 +3,8 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.Iterator;
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -212,7 +214,10 @@ public class Scouting extends GraphicsProgram {
 
 		String[] modes = { "Pending", "Autonomous", "Teleop" };
 		mode = new JComboBox<String>(modes);
+		mode.setForeground(Color.RED);
+		mode.setFont(new Font("Serif", Font.BOLD, 16));
 		mode.setSelectedIndex(0);
+		mode.setVisible(true);
 
 		canvas.add(matchNum, 100, 10);
 		canvas.add(mode, getWidth() / 2, 10);
@@ -238,6 +243,7 @@ public class Scouting extends GraphicsProgram {
 			// When the match starts
 			if (!matchNum.getText().equals("")) {
 				gameOn = true;
+				mode.setForeground(Color.ORANGE);
 				mode.setSelectedIndex(mode.getSelectedIndex() == 0 ? 1 : 2);
 				if (mode.getSelectedIndex() > 0)
 					start.setText("Next Mode");
@@ -269,9 +275,13 @@ public class Scouting extends GraphicsProgram {
 					teamNumber = blue3.getText();
 				}
 			}
+			if (mode.getSelectedIndex() == 2) {
+				mode.setForeground(Color.GREEN);
+			}
 		} else if (event.getSource() == reset) {
 			// When the match resets
 			gameOn = false;
+			mode.setForeground(Color.RED);
 			start.setText("Start");
 			start.setEnabled(true);
 			mode.setSelectedIndex(0);
@@ -297,6 +307,7 @@ public class Scouting extends GraphicsProgram {
 			// sends the data over
 			if (gameOn && matchNumber != null && teamNumber != null && mode.getSelectedIndex() == 2) {
 				gameOn = false;
+				mode.setForeground(Color.RED);
 				try {
 					writeData();
 				} catch (IOException e) {
